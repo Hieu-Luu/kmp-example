@@ -1,6 +1,5 @@
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 
 class Greeting {
     private val platform = getPlatform()
@@ -11,9 +10,5 @@ class Greeting {
 
     fun useCoroutineInCommon() {
         val dispatcher: CoroutineDispatcher = Dispatchers.Main
-
-        runBlocking {
-
-        }
     }
 }
