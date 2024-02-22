@@ -52,7 +52,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew :composeApp:src:androidMain:assemble
+      run: ./gradlew :composeApp:androidMain:assemble
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
@@ -90,7 +90,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew :composeApp:src:desktopMain:${{ matrix.config.task }}
+        run: ./gradlew :composeApp:desktopMain:${{ matrix.config.task }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
