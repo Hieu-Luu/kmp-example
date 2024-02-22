@@ -1,10 +1,11 @@
 name: Build Release
+
 on:
-  workflow_dispatch:
   push:
     branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -27,7 +28,7 @@ jobs:
         cache: gradle
 
     - name: Setup Gradle
-    - uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2
 
     - name: Retrieve the keystore and decode it to a file
       env:
@@ -51,7 +52,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew :composeApp:androidMain:assemble
+      run: ./gradlew :composeApp:src:androidMain:assemble
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
@@ -61,44 +62,44 @@ jobs:
           composeApp/build/outputs/apk/debug/composeApp-debug.apk
           composeApp/build/outputs/apk/release/composeApp-release.apk
 
-build_desktop:
-  strategy:
-  matrix:
-    config: [
-      { target: apple, os: macos-latest, task: packageDmg },
-      { target: windows, os: windows-latest, task: packageMsi },
-      { target: linux, os: ubuntu-latest, task: packageDeb },
-    ]
-  runs-on: ${{ matrix.config.os }}
-  name: Build ${{ matrix.config.target }}
+  build_desktop:
+    strategy:
+      matrix:
+        config: [
+          { target: apple, os: macos-latest, task: packageDmg },
+          { target: windows, os: windows-latest, task: packageMsi },
+          { target: linux, os: ubuntu-latest, task: packageDeb },
+        ]
+    runs-on: ${{ matrix.config.os }}
+    name: Build ${{ matrix.config.target }}
 
-  steps:
-    - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-    - name: Setup JDK 17
-      uses: actions/setup-java@v3
-      with: 
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
 
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Build with Gradle
-      run: ./gradlew :composeApp:desktopMain:${{ matrix.config.task }}
+      - name: Build with Gradle
+        run: ./gradlew :composeApp:src:desktopMain:${{ matrix.config.task }}
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: desktop-${{ matrix.config.target }}
-        path: |
-          composeApp/desktopMain/build/compose/binaries/main/
-          
-      
-
-      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: desktop-${{ matrix.config.target }}
+          path: |
+            composeApp/src/desktopMain/build/compose/binaries/main/
+            
+        
+  
+        
     
