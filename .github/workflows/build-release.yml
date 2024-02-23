@@ -2,9 +2,9 @@ name: Build Kotlin Mutiplatform project
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
-      - main
+      
 jobs:
   build_multiplatform-project:
     strategy:
